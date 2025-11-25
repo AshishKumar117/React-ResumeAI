@@ -1,6 +1,5 @@
 "use server";
 
-import { useUser } from "@clerk/nextjs";
 import Education from "../models/education.model";
 import Experience from "../models/experience.model";
 import Resume from "../models/resume.model";
@@ -138,6 +137,8 @@ export async function addExperienceToResume(
   experienceDataArray: any
 ) {
   try {
+    await connectToDB();
+
     const resume = await Resume.findOne({ resumeId: resumeId });
 
     if (!resume) {
@@ -180,6 +181,8 @@ export async function addEducationToResume(
   educationDataArray: any
 ) {
   try {
+    await connectToDB();
+
     const resume = await Resume.findOne({ resumeId: resumeId });
 
     if (!resume) {
@@ -220,6 +223,8 @@ export async function addSkillToResume(
   skillDataArray: any
 ) {
   try {
+    await connectToDB();
+
     const resume = await Resume.findOne({ resumeId: resumeId });
 
     if (!resume) {
