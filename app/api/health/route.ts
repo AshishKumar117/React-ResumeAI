@@ -2,8 +2,18 @@ import { connectToDB } from "@/lib/mongoose";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+// Secured health endpoint. Set HEALTH_ENDPOINT_SECRET in Vercel env vars.
+export async function GET(request: Request) {
   try {
+    const secret = process.env.HEALTH_ENDPOINT_SECRET;
+    const headerSecret = request.headers.get("x-health-secret");
+
+    if (secret) {
+      if (!headerSecret || headerSecret !== secret) {
+        return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+      }
+    }
+
     await connectToDB();
 
     // Do a lightweight DB check
